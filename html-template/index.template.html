@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">	
+    <head>
+        <title>Code Syntax Highlight Editor Sample</title>         
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <style type="text/css" media="screen"> 
+			html, body	{ width:100%; height:100%; padding:5px; margin:0px; background-color: ${bgcolor}; }
+			body { overflow:auto; }   
+        </style>		    
+        <script type="text/javascript" src="swfobject.js"></script>
+    </head>
+    <body>
+
+	   		
+<textarea id="content" cols="200" rows="5">
+&lt;%@ Page Title="Registration" Language="C#" 
+MasterPageFile="~/Views/Shared/RootTemplate/RootTemplate.master" 
+Inherits="GamMatrix.Components.Web.ViewPageEx&lt;dynamic&gt;"%&gt;
+&lt;asp:Content ContentPlaceHolderID="cphHead" unat="Server"&gt;
+&lt;style&gt;
+/* styles goes here */
+body 
+{
+    backgroung-color:#000000;
+}
+&lt;/style&gt;
+&lt;/asp:Content&gt;
+&lt;asp:Content ContentPlaceHolderID="cphMain" Runat="Server"&gt;
+Text goes here
+&lt;!-- html comments --&gt;
+&lt;%-- server side comments --%&gt;
+&lt;script language="vbscript"&gt;
+Dim Name
+Name = InputBox("Enter your name:")
+ MsgBox "The name is " & Name
+&lt;/script&gt;
+&lt;script language="javascript" type="text/javascript"&gt;
+function XXX() {
+    this.time = new Date();
+    alert(this.time);    
+}
+&lt;/script&gt;
+&lt;script language="C#" runat="server"&gt;
+protected override void OnLoad(EventArgs e)
+{
+    base.OnLoad(e);
+    var s = @"dsdsds";
+}
+&lt;/script&gt;
+&lt;%= DateTime.Now %&gt;
+&lt;input type="XXX" /&gt;
+&lt;/asp:Content&gt;
+</textarea>
+<br />
+
+<div id="flashContent">
+</div>   
+<script language="javascript" type="text/javascript">
+// initialize with parameters
+var flashvars = {
+	// indicate the parser, aspx / csharp / javascript / css / vbscript / html / xml
+	parser: "aspx",
+	
+	// set the editor to read-only mode
+	readOnly: false,	
+
+	// the editor detects client installed fonts and use preferred fonts if installed.
+	// NOTE: the charactor '|' is required at the begin and end of the list
+	preferredFonts : "|Fixedsys|Fixedsys Excelsior 3.01|Fixedsys Excelsior 3.00|Courier New|Courier|",
+
+	// indicate the callback function so that we can load the content into editor once it is initialized.
+	onload : function() {
+		// call setText to load content into editor
+		document.getElementById('ctlFlash').setText( document.getElementById('content').value );
+		document.getElementById('content').style.display = 'none';
+	}
+};
+
+// flash player parameters, you can find more information at: http://code.google.com/p/swfobject/wiki/documentation
+var params = { menu: "false", wmode : "transparent", allowscriptaccess : "always" };
+
+// define the id of the flash control, we need the id in javascript interaction 
+var attributes = { id: "ctlFlash", name: "ctlFlash" };
+
+// embed the flash with size, more information can be found at: http://code.google.com/p/swfobject/wiki/documentation
+swfobject.embedSWF("CodeHighlightEditor.swf", "flashContent", "800", "600", "10.0.0", null, flashvars, params, attributes);
+</script>
+   </body>
+</html>
+
+
+<h2>API Test</h2>
+<hr />
+
+<select onchange="document.getElementById('ctlFlash').setParser(this.value)">
+	<option value="" selected="selected">-- Change Parser --</option>
+	<option value="aspx">ASPX</option>
+	<option value="csharp">C#</option>
+	<option value="css">Stylesheet</option>
+	<option value="javascript">Javascript</option>
+	<option value="vbscript">VBScript</option>
+	<option value="html">HTML</option>
+	<option value="xml">XML</option>
+</select>
+
+
+<input type="button" value="setReadOnly(true)" onclick="document.getElementById('ctlFlash').setReadOnly(true)" />
+
+<input type="button" value="setReadOnly(false)" onclick="document.getElementById('ctlFlash').setReadOnly(false)" />
+
+<input type="button" value="getText()" onclick="alert(document.getElementById('ctlFlash').getText())" />
+
