@@ -9,6 +9,8 @@ package
 	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.text.TextLineMetrics;
+	import flash.utils.setTimeout;
+	import flash.utils.clearTimeout;
 	
 	import mx.controls.Image;
 	
@@ -29,6 +31,7 @@ package
 		
 		private var m_TextField : TextFieldEx = null;
 		private var m_LineNumbers : int = 0;
+		private var m_TimerID : int = 0;
 		
 		public function LineNumberIndicator(textField:TextFieldEx, getSizeFun : Function)
 		{
@@ -45,6 +48,7 @@ package
 		
 		public function refresh() : void{
 			var size : Object = m_GetSizeFunction();
+			this.graphics.clear();
 			this.graphics.beginBitmapFill(m_BgImgBmp);
 			this.graphics.drawRect(0,0,size.width,size.height);
 			this.graphics.endFill();
@@ -75,7 +79,8 @@ package
 		}
 		
 		private function onTextScroll(evt:Event) : void{
-			this.refresh();
+			if( m_TimerID != 0 ) clearTimeout(m_TimerID);
+			m_TimerID = setTimeout( this.refresh, 10);
 		}
 		
 
