@@ -71,6 +71,7 @@ package
 		}
 		public function setText(text:String) : void{
 			this.text = text.replace( /\r/gm, "");
+			this.saveHistory();
 			this.parse();
 		}
 		public function getText() : String{
@@ -98,6 +99,7 @@ package
 			 
 			this.addEventListener(TextEvent.TEXT_INPUT, this.onTextInput);
 			this.addEventListener(KeyboardEvent.KEY_DOWN, this.onKeyDown);
+			this.addEventListener(Event.CHANGE, this.onTextChange);
 					
 			///////////////////////////////
 			
@@ -178,7 +180,7 @@ package
 		private function onTextInput(evt:TextEvent) : void{
 			if( m_TimerID != 0 )
 				clearTimeout(m_TimerID);
-			m_TimerID = setTimeout( this.parse, 1000);
+			m_TimerID = setTimeout( this.parse, 500);
 		}
 			
 		private function parse() : void{
@@ -187,11 +189,45 @@ package
 		}
 		
 		private function onKeyDown(evt:KeyboardEvent) : void{
-			if( evt.ctrlKey || this.type != TextFieldType.INPUT ) return;
-			if( evt.keyCode == 9 ){
-				evt.preventDefault();
-				this.onTabKeyDown(evt.shiftKey);
-			}			
+			switch(evt.keyCode){
+				// TAB
+				case 9:
+				{
+					if( !evt.ctrlKey && this.type == TextFieldType.INPUT ){
+						evt.preventDefault();
+						this.onTabKeyDown(evt.shiftKey);
+					}
+					break;
+				}
+				
+				// DEL BACKSPACE
+				case 8:
+				case 46:
+				{
+					this.onTextInput(null);
+					break;
+				}
+				
+				// CTRL + Y
+				case 89:
+				{
+					if( !evt.altKey && evt.ctrlKey && !evt.shiftKey ){
+						evt.preventDefault();
+						this.redo();
+					}
+					break;
+				}
+					
+				// CTRL + Z
+				case 90:
+				{
+					if( !evt.altKey && evt.ctrlKey && !evt.shiftKey ){
+						evt.preventDefault();
+						this.undo();
+					}
+					break;
+				}
+			}
 		}
 		
 		private function onTabKeyDown(shiftKey:Boolean) : void{
@@ -212,6 +248,43 @@ package
 					this.setSelection( this.selectionBeginIndex, this.selectionEndIndex + (endLine-startLine+1)*INSERTED_TAB_STR.length);
 				}
 			}
+		}
+		
+		// REDO & UNDO
+		private var m_SaveHistoryTimerID : int = 0;
+		private var m_ChangeHistory : Array = new Array();
+		private var m_CurrentStep : int = 0;
+		private function onTextChange(evt:Event) : void{
+			if( m_SaveHistoryTimerID != 0 )
+				clearTimeout(m_SaveHistoryTimerID);
+			m_SaveHistoryTimerID = setTimeout( this.saveHistory, 500);
+		}
+		
+		
+		private function saveHistory() : void{
+			clearTimeout(m_SaveHistoryTimerID);
+			m_SaveHistoryTimerID = 0;
+			if( m_CurrentStep < m_ChangeHistory.length )
+				m_ChangeHistory = m_ChangeHistory.slice( 0, m_CurrentStep+1);
+			m_ChangeHistory.push(this.text);
+			m_CurrentStep = m_ChangeHistory.length - 1;
+		}
+		
+		public function undo() : Boolean {
+			if( m_ChangeHistory.length == 0 || m_CurrentStep == 0 )
+				return false;
+			
+			this.text = m_ChangeHistory[--m_CurrentStep];
+			this.parse();
+			return true;
+		}
+		
+		public function redo() : Boolean {
+			if( m_ChangeHistory.length == 0 || m_CurrentStep >= m_ChangeHistory.length - 1 )
+				return false;
+			this.text = m_ChangeHistory[++m_CurrentStep];
+			this.parse();
+			return true;
 		}
 	}
 	
