@@ -77,13 +77,13 @@ var flashvars = {
 };
 
 // flash player parameters, you can find more information at: http://code.google.com/p/swfobject/wiki/documentation
-var params = { menu: "false", wmode : "transparent", allowscriptaccess : "always" };
+var params = { menu: "false", /* wmode : "transparent", */allowscriptaccess : "always" };
 
 // define the id of the flash control, we need the id in javascript interaction 
 var attributes = { id: "ctlFlash", name: "ctlFlash" };
 
 // embed the flash with size, more information can be found at: http://code.google.com/p/swfobject/wiki/documentation
-swfobject.embedSWF("CodeHighlightEditor.swf", "flashContent", "800", "600", "10.0.0", null, flashvars, params, attributes);
+swfobject.embedSWF("CodeHighlightEditor.swf", "flashContent", "800", "600", "10.0.0", "expressInstall.swf", flashvars, params, attributes);
 </script>
    </body>
 </html>
