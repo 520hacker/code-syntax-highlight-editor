@@ -70,7 +70,7 @@ package
 			this.type = readOnly ? TextFieldType.DYNAMIC : TextFieldType.INPUT;
 		}
 		public function setText(text:String) : void{
-			this.text = text;
+			this.text = text.replace( /\r/gm, "");
 			this.parse();
 		}
 		public function getText() : String{
