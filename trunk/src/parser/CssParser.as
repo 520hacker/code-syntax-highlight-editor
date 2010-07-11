@@ -13,6 +13,7 @@ package parser
 			var beginIndex : int = 0;
 			var endIndex : int = 0;
 			var i : uint;
+			var text : String = null;
 			
 			super.setColor( 0x000000, beginIndex, super.getLength());
 			
@@ -26,21 +27,25 @@ package parser
 			}
 			
 			// keys
-			regex = /([\w-]*?)\:(.*?)\r/sm;
+			regex = /([\w-]*?)\:([^\}\r]+)/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				var text : String = super.getString();
+				text = super.getString();
 				super.setColor( 0x000000, beginIndex, endIndex);
-				
-				while( text.charAt(beginIndex++) != ':' );
-				var newEndIndex : uint = beginIndex;
-				while( text.charAt(++newEndIndex) != ';' && newEndIndex < endIndex );
-				super.setColor( 0x0000FF, beginIndex, newEndIndex);
 			}
 			
-		
+			// values
+			regex = /\:([^\}\r\;]+)/s;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				text = super.getString();
+				super.setColor( 0x0000FF, beginIndex + 1, endIndex);
+			}		
+	
 			// comments /* */
 			regex = /\/\*(.*?)\*\//sm;
 			array = super.search(regex);
