@@ -19,7 +19,7 @@ package parser
 			super.setColor( 0x000000, 0, super.getLength());			
 			
 			// normal tags
-			regex = /(\<[^!\%]*?\>)/sm;
+			regex = /(\<[^\!\%].*?([^\%]>))/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
@@ -30,27 +30,18 @@ package parser
 				
 				super.setColor( 0xFF0000, beginIndex+1, endIndex-1);
 			}
-
+			
 			// server tag <%
-			regex = /(\<\%.*?\%\>)/sm;
+			regex = /(\<\%(.*?)\%\>)/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
 				
-				super.setColor( 0x800000, beginIndex+2, endIndex-2);
-
-				super.setColor( 0x000000, beginIndex, beginIndex+2);
-				super.setColor( 0x000000, endIndex-2, endIndex);		
-			}
-			
-			// server comments <%-- --%>
-			regex = /(\<\%\-\-.*?\-\-\%\>)/sm;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x006600, beginIndex, endIndex);
+				super.setColor( 0x666600, beginIndex+2, endIndex-2);
+				
+				super.setColor( 0x800000, beginIndex, beginIndex+2);
+				super.setColor( 0x800000, endIndex-2, endIndex);		
 			}
 			
 			// atributes double quote
@@ -69,7 +60,18 @@ package parser
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
 				super.setColor( 0x0000FF, beginIndex, endIndex);
+			}	
+			
+			// server comments <%-- --%>
+			regex = /(\<\%\-\-.*?\-\-\%\>)/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor( 0x006600, beginIndex, endIndex);
 			}
+			
+			
 			
 			// server comments <%-- --%>
 			regex = /(\<\%\-\-.*?\-\-\%\>)/sm;
@@ -87,6 +89,15 @@ package parser
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
 				super.setColor( 0x006600, beginIndex, endIndex);
+			}
+			
+			// html doctype <!DOCTYPE >
+			regex = /(\<\!\DOCTYPE.*?\>)/smi;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor( 0x666666, beginIndex, endIndex);
 			}
 			
 			// styles

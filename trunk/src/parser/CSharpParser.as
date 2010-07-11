@@ -49,7 +49,7 @@ package parser
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				super.setColor( 0x0000FF, beginIndex, endIndex);
+				super.setColor( 0x4040FF, beginIndex, endIndex);
 			}
 			
 			// comments //
