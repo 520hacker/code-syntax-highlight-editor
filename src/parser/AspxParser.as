@@ -62,17 +62,7 @@ package parser
 				super.setColor( 0x0000FF, beginIndex, endIndex);
 			}	
 			
-			// server comments <%-- --%>
-			regex = /(\<\%\-\-.*?\-\-\%\>)/sm;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x006600, beginIndex, endIndex);
-			}
-			
-			
-			
+		
 			// server comments <%-- --%>
 			regex = /(\<\%\-\-.*?\-\-\%\>)/sm;
 			array = super.search(regex);
@@ -106,7 +96,7 @@ package parser
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				text = super.m_Editor.text;
+				text = super.getString();
 				beginIndex = text.indexOf('>', beginIndex) + 1;
 				while( text.charAt(--endIndex) != '<' );
 				

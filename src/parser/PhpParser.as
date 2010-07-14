@@ -13,47 +13,32 @@ package parser
 			var beginIndex : int = 0;
 			var endIndex : int = 0;
 			var i : uint;
+			var text : String = null;
+			var attributes : String = null;
 			
 			super.setColor( 0x000000, 0, super.getLength());
 
-			// all tags
-			regex = /(\<[^!\?]*?\>)/sm;
+			// normal tags
+			regex = /(\<[^\!\%].*?([^\%]>))/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				super.setColor( 0xFF0000, beginIndex, endIndex);
+				
+				super.setColor( 0x000084, beginIndex, endIndex);
 			}
 			
-			// strings double quote
-			regex = /\"(.*?)(\"|\r)/sm;
+			// atributes double quote
+			regex = /\=(\s*)(\".*?\")/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				super.setColor( 0x800000, beginIndex, endIndex);
+				super.setColor( 0x5255FF, beginIndex, endIndex);
 			}
 			
-			// strings single quote
-			regex = /\'(.*?)(\'|\r)/sm;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x800000, beginIndex, endIndex);
-			}
-			
-			// strings @"???"
-			regex = /\@\"(.*?)(\")/sm;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x800000, beginIndex, endIndex);
-			}
-			
-			// keywords
-			regex = /\b(var|dynamic|into|group|let|join|ascending|descending|from|where|select|orderby|abstract|as|base|break|case|catch|checked|continue|default|delegate|do|else|event|explicit|extern|false|finally|fixed|foreach|get|goto|if|implicit|in|interface|internal|is|lock|namespace|new|null|object|operator|out|override|params|partial|private|protected|public|readonly|ref|return|set|sealed|sizeof|static|stackalloc|switch|this|throw|true|try|typeof|unchecked|unsafe|using|virtual|while|bool|byte|char|class|double|float|int|interface|long|string|struct|void)\b/sm;
+			// atributes single quote
+			regex = /\=(\s*)(\'.*?\')/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
@@ -61,24 +46,131 @@ package parser
 				super.setColor( 0x0000FF, beginIndex, endIndex);
 			}
 			
-			// comments //
-			regex = /([^:]|^)\/\/(.*?)(\r)/sm;
+			// html comments <!-- -->
+			regex = /(\<\!\-\-.*?\-\-\>)/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				super.setColor( 0x008000, beginIndex, endIndex);
+				super.setColor( 0x848284, beginIndex, endIndex);
 			}
 			
-			// comments /* */
-			regex = /\/\*(.*?)\*\//sm;
+			// html doctype <!DOCTYPE >
+			regex = /(\<\!\DOCTYPE.*?\>)/smi;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				super.setColor( 0x008000, beginIndex, endIndex);
+				super.setColor( 0x666666, beginIndex, endIndex);
 			}
 			
+			// styles
+			regex = /(\<(\s*)style.*?\<(\s*)\/(\s*)style(\s*)\>)/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				
+				super.setColor( 0x900090, beginIndex, endIndex);
+				
+				text = super.getString();
+				beginIndex = text.indexOf('>', beginIndex) + 1;
+				while( text.charAt(--endIndex) != '<' );
+				
+				attributes = text.substring(  array[i].beginIndex, beginIndex).toLowerCase();
+				
+				var cssParser : CssParser = new CssParser( super.m_Editor, beginIndex, endIndex-beginIndex);
+				cssParser.process();
+			}
+			
+			
+			// scripts
+			regex = /(\<(\s*)script.*?\<(\s*)\/(\s*)script(\s*)\>)/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				
+				super.setColor( 0x840000, beginIndex, endIndex);
+				
+				text = super.getString();
+				beginIndex = text.indexOf('>', beginIndex) + 1;
+				while( text.charAt(--endIndex) != '<' );
+				
+				attributes = text.substring(  array[i].beginIndex, beginIndex).toLowerCase();
+				
+				var subParser : SyntaxParserBase = null;
+				var regExp : RegExp = /\blanguage\=(?<quote>\"|\')(?<language>.*?)(\k<quote>)/smi;
+				var results : Array = regExp.exec(attributes);
+				if( results != null && results.length > 3 ){
+					switch(results[2].toString().toLowerCase()){
+						case "javascript":
+						case "jscript":
+							subParser = new JavascriptParser( super.m_Editor, beginIndex, endIndex-beginIndex);
+							break;
+						case "vbscript":
+							subParser = new VbscriptParser( super.m_Editor, beginIndex, endIndex-beginIndex);
+							break;
+					}
+				}
+				
+				
+				if( subParser == null ){
+					regExp = /\btype\=(?<quote>\"|\')(?<type>.*?)(\k<quote>)/smi;
+					results = regExp.exec(attributes);
+					if( results != null && results.length > 3 ){
+						switch(results[2].toString().toLowerCase()){
+							case "text/javascript":
+							case "text/jscript":
+								subParser = new JavascriptParser( super.m_Editor, beginIndex, endIndex-beginIndex);
+								break;
+							case "text/vbscript":
+								subParser = new VbscriptParser( super.m_Editor, beginIndex, endIndex-beginIndex);
+								break;
+						}
+					}
+				}
+				
+				if( subParser == null ){
+					subParser = new JavascriptParser( super.m_Editor, beginIndex, endIndex-beginIndex);		
+				}
+				
+				subParser.process();
+			}
+			
+			
+			// server tag <? ?>
+			regex = /(\<\?(.*?)\?\>)/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;				
+				
+				super.setColor( 0xFF0000, beginIndex, endIndex);
+				
+				text = super.getString();
+				var code : String = text.substring(beginIndex, endIndex);
+				
+				while( text.charAt(--endIndex) != '?' );
+				var r : Array = code.match(/^\<\?(\s*)php(\s*)/s);
+				if( r != null && r.length > 0 )
+					beginIndex += r[0].toString().length;
+				else{
+					r = code.match(/^\<\?(\s*)=(\s*)/s);
+					if( r != null && r.length > 0 ){
+						beginIndex += r[0].toString().length;
+					}
+					else{
+						beginIndex += 2;
+					}
+				}
+				
+				code = text.substring(  beginIndex, endIndex).toLowerCase();	
+				(new PhpCodeParser( super.m_Editor, beginIndex, endIndex-beginIndex)).process();
+			}
+			
+			
+		
 		}
 	}
 }
