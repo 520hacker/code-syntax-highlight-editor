@@ -60,6 +60,12 @@ package
 				case "php":
 					m_Parser = new PhpParser(this); 
 					break;
+				case "phpcode":
+					m_Parser = new PhpCodeParser(this); 
+					break;
+				case "sql":
+					m_Parser = new SqlParser(this); 
+					break;
 				default:
 					return false;
 			}
