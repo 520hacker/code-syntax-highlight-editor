@@ -66,6 +66,15 @@ package
 				case "sql":
 					m_Parser = new SqlParser(this); 
 					break;
+				case "java":
+					m_Parser = new JavaParser(this); 
+					break;
+				case "jsp":
+					m_Parser = new JspParser(this);
+					break;
+				case "cpp":
+					m_Parser = new CppParser(this);
+					break;
 				default:
 					return false;
 			}

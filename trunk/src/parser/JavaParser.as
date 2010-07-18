@@ -1,8 +1,8 @@
 package parser
 {
-	public class JavascriptParser extends SyntaxParserBase
+	public class JavaParser extends SyntaxParserBase
 	{
-		public function JavascriptParser(editor:TextFieldBase, baseIndex:uint = 0, length:int = -1)
+		public function JavaParser(editor:TextFieldBase, baseIndex:uint = 0, length:int = -1)
 		{
 			super(editor, baseIndex, length);
 		}
@@ -22,7 +22,7 @@ package parser
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				super.setColor( 0x800000, beginIndex, endIndex);
+				super.setColor( 0x2A00FF, beginIndex, endIndex);
 			}
 			
 			// strings single quote
@@ -31,16 +31,16 @@ package parser
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				super.setColor( 0x800000, beginIndex, endIndex);
+				super.setColor( 0x2A00FF, beginIndex, endIndex);
 			}
 			
 			// keywords
-			regex = /\b(delete|alert|window|confirm|document|break|continue|do|for|new|this|void|case|default|else|function|return|typeof|while|if|label|switch|var|with|catch|Array|Object|String|try|false|throws|null|true|goto|self|top|parent|setTimeout|undefined|opener)\b/sm;
+			regex = /\b(abstract|continue|for|new|switch|assert|default|goto|package|synchronized|boolean|do|if|private|this|break|double|implements|protected|throw|byte|else|import|public|throws|case|enum|instanceof|return|transient|catch|extends|int|short|try|char|final|interface|static|void|class|finally|long|strictfp|volatile|const|float|native|super|while)\b/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				super.setColor(0x0033FF, beginIndex, endIndex);
+				super.setColor(0x7F0055, beginIndex, endIndex);
 			}
 			
 			// comments //
@@ -49,7 +49,7 @@ package parser
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				super.setColor( 0x008000, beginIndex, endIndex);
+				super.setColor( 0x3F7F5F, beginIndex, endIndex);
 			}
 			
 			// comments /* */
@@ -58,7 +58,7 @@ package parser
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				super.setColor( 0x008000, beginIndex, endIndex);
+				super.setColor( 0x3F7F5F, beginIndex, endIndex);
 			}
 		}
 	}

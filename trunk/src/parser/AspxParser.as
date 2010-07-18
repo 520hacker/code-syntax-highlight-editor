@@ -19,75 +19,36 @@ package parser
 			super.setColor( 0x000000, 0, super.getLength());			
 			
 			// normal tags
-			regex = /(\<[^\!\%].*?([^\%]>))/sm;
+			regex = /\<(\s?)((\w|\/)+\s.*?([^\%]>))|(\<(\s?)(\w|\/)+([^\%]>))/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
 
-				super.setColor( 0x0000FF, beginIndex, beginIndex+1);
-				super.setColor( 0x0000FF, endIndex-1, endIndex);
-				
-				super.setColor( 0xFF0000, beginIndex+1, endIndex-1);
+				super.setColor( 0x000084, beginIndex, endIndex);
 			}
 			
-			// server tag <%
-			regex = /(\<\%(.*?)\%\>)/sm;
+			// tag with prefix
+			regex = /\<(\s?)((\w|\/)+\:\w.*?([^\%]>))/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
 				
-				super.setColor( 0x666600, beginIndex+2, endIndex-2);
+				super.setColor( 0x800000, beginIndex, endIndex);
+			}
+			
+			// server tag <%@ %>
+			regex = /(\<\%\@(.*?)\%\>)/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
 				
-				super.setColor( 0x800000, beginIndex, beginIndex+2);
-				super.setColor( 0x800000, endIndex-2, endIndex);		
-			}
-			
-			// atributes double quote
-			regex = /\=(\".*?\")/sm;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x0000FF, beginIndex, endIndex);
-			}
-			
-			// atributes single quote
-			regex = /\=(\'.*?\')/sm;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x0000FF, beginIndex, endIndex);
-			}	
-			
-		
-			// server comments <%-- --%>
-			regex = /(\<\%\-\-.*?\-\-\%\>)/sm;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor(0x006600, beginIndex, endIndex);
-			}
-			
-			// html comments <!-- -->
-			regex = /(\<\!\-\-.*?\-\-\>)/sm;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x006600, beginIndex, endIndex);
-			}
-			
-			// html doctype <!DOCTYPE >
-			regex = /(\<\!\DOCTYPE.*?\>)/smi;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x666666, beginIndex, endIndex);
+				super.setColor( 0x800000, beginIndex+3, endIndex-2);
+				
+				super.setColor( 0xFF0000, beginIndex, beginIndex+3);
+				super.setColor( 0xFF0000, endIndex-2, endIndex);		
 			}
 			
 			// styles
@@ -96,6 +57,7 @@ package parser
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
+				super.setColor( 0x900090, beginIndex, endIndex);
 				text = super.getString();
 				beginIndex = text.indexOf('>', beginIndex) + 1;
 				while( text.charAt(--endIndex) != '<' );
@@ -112,10 +74,11 @@ package parser
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
+				super.setColor( 0x840000, beginIndex, endIndex);
 				text = super.getString();
 				beginIndex = text.indexOf('>', beginIndex) + 1;
 				while( text.charAt(--endIndex) != '<' );
-
+				
 				attributes = text.substring(  array[i].beginIndex, beginIndex).toLowerCase();
 				
 				var subParser : SyntaxParserBase = null;
@@ -174,6 +137,91 @@ package parser
 				
 				subParser.process();
 			}
+					
+			// atributes double quote
+			regex = /\=(\".*?\")/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor( 0x0000FF, beginIndex, endIndex);
+			}
+			
+			// atributes single quote
+			regex = /\=(\'.*?\')/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor( 0x5255FF, beginIndex, endIndex);
+			}	
+
+			// html comments <!-- -->
+			regex = /(\<\!\-\-.*?\-\-\>)/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor( 0x666666, beginIndex, endIndex);
+			}
+			
+			// html doctype <!DOCTYPE >
+			regex = /(\<\!\DOCTYPE.*?\>)/smi;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor( 0x666666, beginIndex, endIndex);
+			}	
+
+			// server tag <%# %> <%= %> <%: %>
+			regex = /(\<\%[^\@\$](.*?)\%\>)/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+								
+				super.setColor( 0xFF0000, beginIndex, endIndex);
+				
+				text = super.getString();
+				var code : String = text.substring(beginIndex, endIndex);
+				if( code.search( /^\<\%(\#|\:|\=)/s ) == 0 )
+					beginIndex = beginIndex+3;
+				else
+					beginIndex = beginIndex+2;
+				while( text.charAt(--endIndex) != '%' );
+				
+				new CSharpParser( super.m_Editor, beginIndex, endIndex-beginIndex).process();
+			}
+			
+			// server tag <%$ %>
+			regex = /(\<\%\$(.*?):(.*?)\%\>)/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				
+				super.setColor( 0xFF0000, beginIndex, endIndex);
+				
+				text = super.getString();
+				beginIndex = beginIndex+3;
+				while( text.charAt(--endIndex) != '%' );
+				
+				var colonIndex : int = text.indexOf( ":", beginIndex);
+				
+				super.setColor( 0x000000, beginIndex, colonIndex+1);
+				super.setColor( 0xCE6500, colonIndex+1, endIndex);
+			}
+			
+			// server comments <%-- --%>
+			regex = /(\<\%\-\-.*?\-\-\%\>)/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor(0x006600, beginIndex, endIndex);
+			}
+
 		}
 	}
 }
