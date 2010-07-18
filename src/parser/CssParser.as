@@ -52,7 +52,7 @@ package parser
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				super.setColor( 0x008000, beginIndex, endIndex);
+				super.setColor( 0x666666, beginIndex, endIndex);
 			}
 		}
 	}
