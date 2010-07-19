@@ -112,7 +112,7 @@ package parser
 							subParser = new VbscriptParser( super.m_Editor, beginIndex, endIndex-beginIndex);
 							break;
 						case "vb":
-							subParser = new VbscriptParser( super.m_Editor, beginIndex, endIndex-beginIndex);
+							subParser = new VbNetParser( super.m_Editor, beginIndex, endIndex-beginIndex);
 							break;
 						case "c#":
 							subParser = new CSharpParser( super.m_Editor, beginIndex, endIndex-beginIndex);
@@ -134,7 +134,7 @@ package parser
 								subParser = new CSharpParser( super.m_Editor, beginIndex, endIndex-beginIndex);
 								break;
 							case "text/vb":
-								subParser = new VbscriptParser( super.m_Editor, beginIndex, endIndex-beginIndex);
+								subParser = new VbNetParser( super.m_Editor, beginIndex, endIndex-beginIndex);
 								break;
 							case "text/vbscript":
 								subParser = new VbscriptParser( super.m_Editor, beginIndex, endIndex-beginIndex);
