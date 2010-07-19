@@ -26,7 +26,7 @@ package parser
 			}
 			
 			// comments
-			regex = /\'(.*?)(\'|\r)/sm;
+			regex = /((\brem\b)|\')[^\r]*/ism;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
