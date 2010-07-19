@@ -68,6 +68,24 @@ package parser
 				cssParser.process();
 			}
 			
+			// atributes double quote
+			regex = /\=(\"[^\r|\n|\"]*\")/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor( 0x0000FF, beginIndex, endIndex);
+			}
+			
+			// atributes single quote
+			regex = /\=(\'[^\r|\n|\']*\')/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor( 0x5255FF, beginIndex, endIndex);
+			}	
+			
 			// scripts
 			regex = /(\<(\s*)script.*?\<(\s*)\/(\s*)script(\s*)\>)/sm;
 			array = super.search(regex);
@@ -138,23 +156,7 @@ package parser
 				subParser.process();
 			}
 					
-			// atributes double quote
-			regex = /\=(\".*?\")/sm;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x0000FF, beginIndex, endIndex);
-			}
 			
-			// atributes single quote
-			regex = /\=(\'.*?\')/sm;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x5255FF, beginIndex, endIndex);
-			}	
 
 			// html comments <!-- -->
 			regex = /(\<\!\-\-.*?\-\-\>)/sm;

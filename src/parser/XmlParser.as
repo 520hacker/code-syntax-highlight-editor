@@ -41,6 +41,14 @@ package parser
 				super.setColor( 0x0000FF, beginIndex, endIndex);
 			}
 			
+			// html doctype <!DOCTYPE >
+			regex = /(\<\!\DOCTYPE.*?\>)/smi;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor( 0x666666, beginIndex, endIndex);
+			}	
 			
 			// xml comments <!-- -->
 			regex = /(\<\!\-\-.*?\-\-\>)/sm;
@@ -59,6 +67,8 @@ package parser
 				endIndex = array[i].endIndex;
 				super.setColor( 0x666666, beginIndex, endIndex);
 			}
+			
+			
 			
 		}
 	}
