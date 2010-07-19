@@ -33,7 +33,7 @@ package parser
 
 		
 			// atributes double quote
-			regex = /\=(\".*?\")/sm;
+			regex = /\=(\"[^\r|\n|\"]*\")/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
@@ -42,7 +42,7 @@ package parser
 			}
 			
 			// atributes single quote
-			regex = /\=(\'.*?\')/sm;
+			regex = /\=(\'[^\r|\n|\']*\')/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;

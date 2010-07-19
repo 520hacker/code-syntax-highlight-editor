@@ -16,8 +16,9 @@ package parser
 			
 			super.setColor( 0x000000, beginIndex, super.getLength());
 			
+
 			// strings double quote
-			regex = /\"(.*?)(\"|\r)/sm;
+			regex = /\"([^\r|\n]*?)([^\\]\")/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
@@ -26,7 +27,7 @@ package parser
 			}
 			
 			// strings single quote
-			regex = /\'(.*?)(\'|\r)/sm;
+			regex = /\'([^\r|\n]*?)([^\\]\')/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
@@ -44,7 +45,7 @@ package parser
 			}
 			
 			// comments //
-			regex = /([^:]|^)\/\/(.*?)(\r)/sm;
+			regex = /\/\/([^\r|\n]*)/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;

@@ -16,7 +16,7 @@ package parser
 			
 			super.setColor( 0x000000, beginIndex, super.getLength());
 					
-			// keywords
+			// Reserved words
 			regex = /\b(And|As|ByRef|ByVal|Call|Case|Class|Const|Dim|Do|Each|Else|ElseIf|Empty|End|Eqv|Exit|False|For|Function|Get|GoTo|If|Imp|In|Is|Let|Loop|Me|Mod|Enum|New|Next|Not|Nothing|Null|On|Option|Or|Private|Public|ReDim|Rem|Resume|Select|Set|Stop|Sub|Then|To|True|Until|Wend|While|With|Xor|Execute|Randomize|Erase|ExecuteGlobal|Explicit|step)\b/smi;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
@@ -35,7 +35,7 @@ package parser
 			}
 			
 			// strings double quote
-			regex = /\"(.*?)(\"|\r)/sm;
+			regex = /\"([^\r|\n]*?)\"/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;

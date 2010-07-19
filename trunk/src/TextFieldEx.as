@@ -75,6 +75,9 @@ package
 				case "cpp":
 					m_Parser = new CppParser(this);
 					break;
+				case "asp":
+					m_Parser = new AspParser(this);
+					break;
 				default:
 					return false;
 			}

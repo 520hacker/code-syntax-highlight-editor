@@ -1,8 +1,8 @@
 package parser
 {
-	public class PhpParser extends SyntaxParserBase
+	public class AspParser extends SyntaxParserBase
 	{
-		public function PhpParser(editor:TextFieldBase, baseIndex:uint = 0, length:int = -1)
+		public function AspParser(editor:TextFieldBase, baseIndex:uint = 0, length:int = -1)
 		{
 			super(editor, baseIndex, length);
 		}
@@ -16,52 +16,30 @@ package parser
 			var text : String = null;
 			var attributes : String = null;
 			
-			super.setColor( 0x000000, 0, super.getLength());
-
+			super.setColor( 0x000000, 0, super.getLength());			
+			
 			// normal tags
-			regex = /(\<[^\!\?].*?([^\?]>))/sm;
+			regex = /\<[^!\%].*?([^\%]\>)/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+
+				super.setColor( 0x000084, beginIndex, endIndex);
+			}
+			
+			
+			// server tag <%@ %>
+			regex = /(\<\%\@(.*?)\%\>)/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
 				
-				super.setColor( 0x000084, beginIndex, endIndex);
-			}
-			
-			// atributes double quote
-			regex = /\=(\s*)(\"[^\r|\n|\"]*\")/sm;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x5255FF, beginIndex, endIndex);
-			}
-			
-			// atributes single quote
-			regex = /\=(\s*)(\'[^\r|\n|\']*\')/sm;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x0000FF, beginIndex, endIndex);
-			}
-			
-			// html comments <!-- -->
-			regex = /(\<\!\-\-.*?\-\-\>)/sm;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x848284, beginIndex, endIndex);
-			}
-			
-			// html doctype <!DOCTYPE >
-			regex = /(\<\!\DOCTYPE.*?\>)/smi;
-			array = super.search(regex);
-			for( i = 0; i < array.length; i++){
-				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;
-				super.setColor( 0x666666, beginIndex, endIndex);
+				super.setColor( 0x800000, beginIndex+3, endIndex-2);
+				
+				super.setColor( 0xFF0000, beginIndex, beginIndex+3);
+				super.setColor( 0xFF0000, endIndex-2, endIndex);		
 			}
 			
 			// styles
@@ -70,9 +48,7 @@ package parser
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				
 				super.setColor( 0x900090, beginIndex, endIndex);
-				
 				text = super.getString();
 				beginIndex = text.indexOf('>', beginIndex) + 1;
 				while( text.charAt(--endIndex) != '<' );
@@ -83,6 +59,23 @@ package parser
 				cssParser.process();
 			}
 			
+			// atributes double quote
+			regex = /\=(\"[^\r|\n|\"]*\")/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor( 0x0000FF, beginIndex, endIndex);
+			}
+			
+			// atributes single quote
+			regex = /\=(\'[^\r|\n|\']*\')/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor( 0x5255FF, beginIndex, endIndex);
+			}	
 			
 			// scripts
 			regex = /(\<(\s*)script.*?\<(\s*)\/(\s*)script(\s*)\>)/sm;
@@ -90,9 +83,7 @@ package parser
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
 				endIndex = array[i].endIndex;
-				
 				super.setColor( 0x840000, beginIndex, endIndex);
-				
 				text = super.getString();
 				beginIndex = text.indexOf('>', beginIndex) + 1;
 				while( text.charAt(--endIndex) != '<' );
@@ -124,6 +115,7 @@ package parser
 							case "text/jscript":
 								subParser = new JavascriptParser( super.m_Editor, beginIndex, endIndex-beginIndex);
 								break;
+							
 							case "text/vbscript":
 								subParser = new VbscriptParser( super.m_Editor, beginIndex, endIndex-beginIndex);
 								break;
@@ -132,45 +124,52 @@ package parser
 				}
 				
 				if( subParser == null ){
-					subParser = new JavascriptParser( super.m_Editor, beginIndex, endIndex-beginIndex);		
+					subParser = new JavascriptParser( super.m_Editor, beginIndex, endIndex-beginIndex);
 				}
 				
 				subParser.process();
 			}
+					
 			
-			
-			// server tag <? ?>
-			regex = /(\<\?(.*?)\?\>)/sm;
+
+			// html comments <!-- -->
+			regex = /(\<\!\-\-.*?\-\-\>)/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex;				
-				
+				endIndex = array[i].endIndex;
+				super.setColor( 0x666666, beginIndex, endIndex);
+			}
+			
+			// html doctype <!DOCTYPE >
+			regex = /(\<\!\DOCTYPE.*?\>)/smi;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor( 0x666666, beginIndex, endIndex);
+			}	
+
+			// server tag <% %> <%= %> 
+			regex = /(\<\%[^\@](.*?)\%\>)/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+								
 				super.setColor( 0xFF0000, beginIndex, endIndex);
 				
 				text = super.getString();
 				var code : String = text.substring(beginIndex, endIndex);
+				if( code.search( /^\<\%\=/s ) == 0 )
+					beginIndex = beginIndex+3;
+				else
+					beginIndex = beginIndex+2;
+				while( text.charAt(--endIndex) != '%' );
 				
-				while( text.charAt(--endIndex) != '?' );
-				var r : Array = code.match(/^\<\?(\s*)php(\s*)/s);
-				if( r != null && r.length > 0 )
-					beginIndex += r[0].toString().length;
-				else{
-					r = code.match(/^\<\?(\s*)=(\s*)/s);
-					if( r != null && r.length > 0 ){
-						beginIndex += r[0].toString().length;
-					}
-					else{
-						beginIndex += 2;
-					}
-				}
-				
-				code = text.substring(  beginIndex, endIndex).toLowerCase();	
-				(new PhpCodeParser( super.m_Editor, beginIndex, endIndex-beginIndex)).process();
+				new AspVbscriptParser( super.m_Editor, beginIndex, endIndex-beginIndex).process();
 			}
 			
-			
-		
 		}
 	}
 }
