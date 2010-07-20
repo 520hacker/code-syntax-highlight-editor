@@ -32,6 +32,7 @@
 	<input type="button" value="SQL" onclick="loadContent('sql', 'txtSQL')" disabled="disabled"/>
 	<input type="button" value="XML" onclick="loadContent('xml', 'txtXML')" disabled="disabled"/>
 	<input type="button" value="CSS" onclick="loadContent('css', 'txtCSS')" disabled="disabled"/>
+	<input type="button" value="HTML" onclick="loadContent('html', 'txtHTML')" disabled="disabled"/>
 </div>	  
 <textarea id="txtASPX" style="display:none">&lt;%@ Page Language="C#" ContentType="text/html" ResponseEncoding="utf-8" %&gt;
 &lt;%@ Import Namespace="System.Data" %&gt;
@@ -400,6 +401,37 @@ p
 	font-family:"Times New Roman";
 	font-size:20px;
 }
+</textarea>
+
+<textarea id="txtHTML" style="display:none">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8" /&gt;
+&lt;title&gt;Samle&lt;/title&gt;
+
+&lt;style type="text/css"&gt;
+body { background:#000033 }
+h1 { font-family:Georgia, "Times New Roman", Times, serif; font-size:12px; }
+ul li
+{
+	padding-left:10px
+}
+&lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+	&lt;table lang="af" dir="rtl" &gt;
+    	&lt;tr&gt;
+        	&lt;td&gt;No,&lt;/td&gt;
+            &lt;td&gt;Size&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+        	&lt;td&gt;1&lt;/td&gt;
+            &lt;td&gt;59&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
 </textarea>
 <br />
 
