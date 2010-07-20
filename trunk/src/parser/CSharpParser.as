@@ -36,11 +36,11 @@ package parser
 			}
 			
 			// strings @"???"
-			regex = /\@\"(.*?)([^\"]\"[^\"])/sm;
+			regex = /\@\"(""|[^"])*\"/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
-				endIndex = array[i].endIndex - 1;
+				endIndex = array[i].endIndex;
 				super.setColor( 0x800000, beginIndex, endIndex);
 			}
 			
