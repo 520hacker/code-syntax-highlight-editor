@@ -92,8 +92,21 @@ package
 			this.saveHistory();
 			this.parse();
 		}
+		
+	
 		public function getText() : String{
-			return this.text;
+			var str : String = this.text;
+			if( text == null || text.length == 0)
+				return ""; 
+			
+			var reg : RegExp = /[^\x00-\x7f]|&|\"|\'|\<|\>|\\|\n|\r|\t/g;
+			var encodeFun : Function = function encodeFun(...args) : String
+			{
+				var temp : String = String(args[0]).charCodeAt(0).toString(16);
+				while( temp.length < 4 ) temp = "0" + temp;
+				return "\\u" + temp;
+			};
+			return str.replace( reg, encodeFun);
 		}
 		
 		public function TextFieldEx()
@@ -121,7 +134,7 @@ package
 					
 			///////////////////////////////
 			
-			if(  this.loaderInfo.parameters["preferredFonts"] != null )
+			if(  this.loaderInfo.parameters["preferredFonts "] != null )
 				m_PreferredFonts = this.loaderInfo.parameters["preferredFonts"];
 			var fontName : String = this.getFontName();
 			var textFormat : TextFormat = new TextFormat( this.getFontName(), 16, 0x000000	);
