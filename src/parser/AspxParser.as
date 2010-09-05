@@ -39,6 +39,33 @@ package parser
 			}
 			
 			// server tag <%@ %>
+			regex = /(\<\%\@)|(\<\%\$)|(\%\>)/sm;
+			array = super.search(regex);
+			var stack : Array = new Array();
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				
+				if( super.getString().charAt(beginIndex) == '<' ){
+					var o : Object = new Object();
+					o.type = super.getString().substr(beginIndex,3);
+					o.beginIndex = beginIndex;
+					stack.push(o);
+				}else if( super.getString().charAt(beginIndex) == '%' ){
+					if( stack.length > 0 ){
+						var o : * = stack.pop();
+						if( o.type = '<%@' ){
+							super.setColor( 0x333333, o.beginIndex+3, endIndex-2);
+							
+							super.setColor( 0xFF0000, o.beginIndex, o.beginIndex+3);
+							super.setColor( 0xFF0000, endIndex-2, endIndex);
+						}
+					}
+				}		
+						
+			}
+			/*
+			// server tag <%@ %>
 			regex = /(\<\%\@(.*?)\%\>)/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
@@ -50,6 +77,7 @@ package parser
 				super.setColor( 0xFF0000, beginIndex, beginIndex+3);
 				super.setColor( 0xFF0000, endIndex-2, endIndex);		
 			}
+			*/
 			
 			// styles
 			regex = /(\<(\s*)style.*?\<(\s*)\/(\s*)style(\s*)\>)/sm;
