@@ -17,6 +17,7 @@ package parser
 			
 			super.setColor( 0x000000, beginIndex, super.getLength());
 			
+			
 			// tags, ids, classes, values
 			regex = /(.*?)\{(.*?)\}/sm;
 			array = super.search(regex);
@@ -54,6 +55,16 @@ package parser
 				endIndex = array[i].endIndex;
 				super.setColor( 0x666666, beginIndex, endIndex);
 			}
+			
+			// <!-- -->
+			regex = /(\<\!\-\-)|(\-\-\>)/sm;
+			array = super.search(regex);
+			for( i = 0; i < array.length; i++){
+				beginIndex = array[i].beginIndex;
+				endIndex = array[i].endIndex;
+				super.setColor( 0x666666, beginIndex, endIndex);
+			}
+			
 		}
 	}
 }
