@@ -27,7 +27,7 @@ package parser
 			}
 			
 			// strings single quote
-			regex = /\'([^\r|\n]*?)([^\\]\')/sm;
+			regex = /(\'(\\?)[^\r|\n]\')/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;
