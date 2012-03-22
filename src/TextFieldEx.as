@@ -20,7 +20,7 @@ package
 		private var m_TextFormat : TextFormat = null;
 		private var m_LineHeight : int = 0;
 		private var m_Parser : SyntaxParserBase = null;
-		private var m_PreferredFonts : String = "|Fixedsys|Fixedsys Excelsior 3.01|Fixedsys Excelsior 3.00|Courier New|Courier|";
+		private var m_PreferredFonts : String = "|Consolas|Courier New|Courier|Fixedsys|Fixedsys Excelsior 3.01|Fixedsys Excelsior 3.00|";
 		
 		private const INSERTED_TAB_STR : String = "    ";
 		
@@ -99,15 +99,16 @@ package
 			if( text == null || text.length == 0)
 				return ""; 
 			
-			var reg : RegExp = /[^\x00-\x7f]|&|\"|\'|\<|\>|\\|\n|\r|\t/g;
+			var reg : RegExp = /[^\x00-\x7f]|&|\"|\'|\<|\>|\r|\n|\\|\t/gms;
 			var encodeFun : Function = function encodeFun(...args) : String
 			{
 				var temp : String = String(args[0]).charCodeAt(0).toString(16);
 				while( temp.length < 4 ) temp = "0" + temp;
 				return "\\u" + temp;
 			};
-			return str.replace( reg, encodeFun);
+			return str.replace(/\r\n/g,'\n').replace(/\r/g,'\n').replace( reg, encodeFun);
 		}
+
 		
 		public function TextFieldEx()
 		{
@@ -134,11 +135,11 @@ package
 					
 			///////////////////////////////
 			
-			if(  this.loaderInfo.parameters["preferredFonts "] != null )
+			if(  this.loaderInfo.parameters["preferredFonts"] != null )
 				m_PreferredFonts = this.loaderInfo.parameters["preferredFonts"];
 			var fontName : String = this.getFontName();
-			var textFormat : TextFormat = new TextFormat( this.getFontName(), 16, 0x000000	);
-			m_TextFormat = new TextFormat( this.getFontName(), 16, 0x000000	);
+			var textFormat : TextFormat = new TextFormat( this.getFontName(), 12, 0x000000	);
+			m_TextFormat = new TextFormat( this.getFontName(), 12, 0x000000	);
 			this.defaultTextFormat = textFormat;
 			{
 				// detect the line-height, stupid way; getLineMetrics is untrusted
