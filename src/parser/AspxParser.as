@@ -53,8 +53,8 @@ package parser
 					stack.push(o);
 				}else if( super.getString().charAt(beginIndex) == '%' ){
 					if( stack.length > 0 ){
-						var o : * = stack.pop();
-						if( o.type == '<%@' ){
+						var o2 : * = stack.pop();
+						if( o2.type == '<%@' ){
 							super.setColor( 0x333333, o.beginIndex+3, endIndex-2);
 							
 							super.setColor( 0xFF0000, o.beginIndex, o.beginIndex+3);

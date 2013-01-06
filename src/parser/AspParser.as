@@ -51,7 +51,7 @@ package parser
 				super.setColor( 0x900090, beginIndex, endIndex);
 				text = super.getString();
 				beginIndex = text.indexOf('>', beginIndex) + 1;
-				while( text.charAt(--endIndex) != '<' );
+				while( text.charAt(--endIndex) != '<' ) { };
 				
 				attributes = text.substring(  array[i].beginIndex, beginIndex).toLowerCase();
 				
@@ -86,7 +86,7 @@ package parser
 				super.setColor( 0x840000, beginIndex, endIndex);
 				text = super.getString();
 				beginIndex = text.indexOf('>', beginIndex) + 1;
-				while( text.charAt(--endIndex) != '<' );
+				while( text.charAt(--endIndex) != '<' ) { };
 				
 				attributes = text.substring(  array[i].beginIndex, beginIndex).toLowerCase();
 				
