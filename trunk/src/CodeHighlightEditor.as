@@ -1,10 +1,17 @@
 import flash.events.Event;
 import flash.events.TextEvent;
+import flash.events.ContextMenuEvent;
 import flash.text.TextField;
+import flash.net.navigateToURL;
+import flash.net.URLRequest;
+import flash.ui.ContextMenu;
+import flash.ui.ContextMenuItem;
+import flash.display.StageDisplayState;
 
 import mx.events.FlexEvent;
 import mx.events.ResizeEvent;
 import mx.events.ScrollEvent;
+
 
 import parser.*;
 
@@ -24,6 +31,13 @@ private function creationCompleteHandler(event:FlexEvent):void
 	m_TextField.addEventListener(Event.CHANGE, this.onTextChange);
 	m_TextField.addEventListener(Event.SCROLL, this.onTextChange);
 	onTextChange(null);
+	
+	var item2:ContextMenuItem = new ContextMenuItem("Code Syntax Highlight Editor V2.0", false);
+	item2.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onVisitMenu);
+	
+	m_TextField.contextMenu = new ContextMenu();
+	m_TextField.contextMenu.hideBuiltInItems();
+	m_TextField.contextMenu.customItems = [item2];
 }
 
 private function onAddToStage(evt:Event) : void{
@@ -34,6 +48,10 @@ private function getLineNumberIndicatorSize() : Object{
 	return { width: line_wrapper.width, height: line_wrapper.height };
 }
 
+
+private function onVisitMenu(evt:ContextMenuEvent):void {
+	navigateToURL(new URLRequest("http://code.google.com/p/code-syntax-highlight-editor/"), "_blank");
+}
 
 private function resizeHandler(event:ResizeEvent):void
 {

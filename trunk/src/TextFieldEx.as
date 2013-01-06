@@ -32,6 +32,16 @@ package
 			return m_LineHeight;
 		}
 		
+		public function insertText(text:String) : Boolean{
+			if( text == null || text.length == 0 )
+				return false;
+			if( this.type != TextFieldType.INPUT )
+				return false;
+			this.replaceSelectedText(text);
+			this.saveHistory();
+			this.parse();
+			return true;
+		}
 		
 		public function setParser(lang:String) : Boolean{
 			if( lang == null ) return false;
@@ -135,11 +145,17 @@ package
 					
 			///////////////////////////////
 			
+			var fontSize : int = 12;
+			if(  this.loaderInfo.parameters["fontSize"] != null )
+				fontSize = parseInt( this.loaderInfo.parameters["fontSize"], 10);
+			if( isNaN(fontSize) || fontSize < 5 )
+				fontSize = 12;
+			
 			if(  this.loaderInfo.parameters["preferredFonts"] != null )
 				m_PreferredFonts = this.loaderInfo.parameters["preferredFonts"];
 			var fontName : String = this.getFontName();
-			var textFormat : TextFormat = new TextFormat( this.getFontName(), 12, 0x000000	);
-			m_TextFormat = new TextFormat( this.getFontName(), 12, 0x000000	);
+			var textFormat : TextFormat = new TextFormat( this.getFontName(), fontSize, 0x000000	);
+			m_TextFormat = new TextFormat( this.getFontName(), fontSize, 0x000000	);
 			this.defaultTextFormat = textFormat;
 			{
 				// detect the line-height, stupid way; getLineMetrics is untrusted
@@ -168,6 +184,7 @@ package
 			ExternalInterface.addCallback( "setText", this.setText);
 			ExternalInterface.addCallback( "getText", this.getText);
 			ExternalInterface.addCallback( "setParser", this.setParser);
+			ExternalInterface.addCallback( "insertText", this.insertText);
 			
 			
 			////////////////////////////////////////////////////
