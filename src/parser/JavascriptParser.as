@@ -35,7 +35,7 @@ package parser
 			}
 			
 			// keywords
-			regex = /\b(delete|alert|window|confirm|document|break|continue|do|for|new|this|void|case|default|else|function|return|typeof|while|if|label|switch|var|with|catch|Array|Object|String|try|false|throws|null|true|goto|self|top|parent|setTimeout|undefined|opener)\b/sm;
+			regex = /\b(delete|alert|window|confirm|document|break|continue|do|for|new|this|void|case|default|else|function|return|typeof|while|if|label|switch|var|with|catch|Array|Object|String|try|false|throws|null|true|goto|self|top|parent|setTimeout|undefined|opener|arguments)\b/sm;
 			array = super.search(regex);
 			for( i = 0; i < array.length; i++){
 				beginIndex = array[i].beginIndex;

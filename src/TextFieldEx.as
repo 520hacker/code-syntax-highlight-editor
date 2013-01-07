@@ -88,6 +88,9 @@ package
 				case "asp":
 					m_Parser = new AspParser(this);
 					break;
+				case "custom1": 
+					m_Parser = new Custom1Parser(this); 
+					break;
 				default:
 					return false;
 			}
