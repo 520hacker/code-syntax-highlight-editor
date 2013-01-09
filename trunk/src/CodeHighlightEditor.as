@@ -32,7 +32,7 @@ private function creationCompleteHandler(event:FlexEvent):void
 	m_TextField.addEventListener(Event.SCROLL, this.onTextChange);
 	onTextChange(null);
 	
-	var item2:ContextMenuItem = new ContextMenuItem("Code Syntax Highlight Editor V2.0", false);
+	var item2:ContextMenuItem = new ContextMenuItem("Code Syntax Highlight Editor V2.4", false);
 	item2.addEventListener(ContextMenuEvent.MENU_ITEM_SELECT, onVisitMenu);
 	
 	m_TextField.contextMenu = new ContextMenu();
